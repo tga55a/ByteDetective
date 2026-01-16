@@ -71,10 +71,10 @@ public class ByteDetective {
             int counter = 0;
 
             while ((byteValue = inputStream.read()) != -1) {
-                System.out.println(byteValue);
+                System.out.println("Byte " + counter + ": " + byteValue);
                 counter++;
             }
-            System.out.println(counter);
+            System.out.println("counter: " + counter);
             return byteValue;
         }
         
