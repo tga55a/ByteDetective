@@ -6,7 +6,7 @@ import java.io.*;
  * Practice reading raw bytes from a file using FileInputStream.
  * Complete the methods below to read, interpret, and analyze binary data.
  * 
- * @author [Your Name]
+ * @author Troy Gardner II
  */
 public class ByteDetective {
     
@@ -51,9 +51,9 @@ public class ByteDetective {
      * 
      * Hint: Review Lecture 1, Slide 3 for the standard reading loop pattern
      */
-    public static void readAllBytes() {
+    public static int readAllBytes() throws IOException {
         // TODO: Open FileInputStream using try-with-resources
-        
+
         // TODO: Create an int variable for the byte value
         
         // TODO: Create a counter for total bytes
@@ -66,8 +66,19 @@ public class ByteDetective {
         // TODO: After loop, print total count
         
         // TODO: Handle IOException
+        try (FileInputStream inputStream = new FileInputStream(MYSTERY_FILE) ) {
+            int byteValue = 0;
+            int counter = 0;
+
+            while ((byteValue = inputStream.read()) != -1) {
+                System.out.println(byteValue);
+                counter++;
+            }
+            System.out.println(counter);
+            return byteValue;
+        }
         
-        System.out.println("TODO: Implement readAllBytes()");
+        //System.out.println("TODO: Implement readAllBytes()");
     }
     
     /**
@@ -84,11 +95,20 @@ public class ByteDetective {
      * Hint: %02X means "2-digit uppercase hexadecimal"
      * Example: byte value 72 becomes "48" in hex
      */
-    public static void displayAsHex() {
+    public static void displayAsHex() throws IOException {
         // TODO: Similar structure to readAllBytes()
         // TODO: But use String.format("%02X ", byteValue) for display
-        
-        System.out.println("TODO: Implement displayAsHex()");
+
+        try (FileInputStream inputStream = new FileInputStream(MYSTERY_FILE) ) {
+            int byteValue = 0;
+            int counter = 0;
+
+            while ((byteValue = inputStream.read()) != -1) {
+                System.out.print(String.format("%02X ", byteValue));
+                counter++;
+            }
+            System.out.println(counter);
+        }
     }
     
     /**
@@ -109,11 +129,17 @@ public class ByteDetective {
      * 
      * Hint: If mystery.bin contains "Hello", you should see those letters
      */
-    public static void attemptAsAscii() {
+    public static void attemptAsAscii() throws IOException {
         // TODO: Same loop pattern
         // TODO: Cast to char and print: System.out.print((char) byteValue);
         
-        System.out.println("TODO: Implement attemptAsAscii()");
+        try (FileInputStream inputStream = new FileInputStream(MYSTERY_FILE) ) {
+            int byteValue;
+            while ((byteValue = inputStream.read()) != -1) {
+                System.out.print((char)byteValue);
+            }
+        }
+
     }
     
     /**
@@ -137,12 +163,12 @@ public class ByteDetective {
      * Max value: 122
      * Average: 78.5
      */
-    public static void analyzeFile() {
+    public static void analyzeFile() throws IOException {
         // TODO: Initialize tracking variables:
-        //       int count = 0;
-        //       int min = 256;  (start higher than any byte)
-        //       int max = -1;   (start lower than any byte)
-        //       long sum = 0;   (use long to avoid overflow)
+        int count = 0;
+        int min = 256;  // (start higher than any byte)
+        int max = -1;   // (start lower than any byte)
+        long sum = 0;   // (use long to avoid overflow)
         
         // TODO: Read file with standard loop
         //       Inside loop:
@@ -150,14 +176,30 @@ public class ByteDetective {
         //         - Update min if byteValue < min
         //         - Update max if byteValue > max
         //         - Add byteValue to sum
+        try (FileInputStream inputStream = new FileInputStream(MYSTERY_FILE) ) {
+            int byteValue;
+            while ((byteValue = inputStream.read()) != -1) {
+                count++;
+                if (byteValue < min) {
+                    min = byteValue;
+                }
+                if (byteValue > max) {
+                    max = byteValue;
+                }
+                sum += byteValue;
+            }
+        }
+
         
         // TODO: After loop, calculate and display:
         //       - Total bytes (count)
         //       - Min value
         //       - Max value
         //       - Average (sum / count as a double)
-        
-        System.out.println("TODO: Implement analyzeFile()");
+        System.out.println("Total bytes: " + count);
+        System.out.println("Minimum value: " + min);
+        System.out.println("Maximum value " + max);
+        System.out.println("Average: " + sum / count);
     }
     
     /**
@@ -166,7 +208,7 @@ public class ByteDetective {
      * DO NOT MODIFY THIS METHOD.
      * Implement the methods above, then run this to test your code.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("=== Lab 1: Byte Detective ===\n");
         
         System.out.println("=== Task 1: First Byte (Example) ===");
